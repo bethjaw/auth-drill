@@ -18,8 +18,9 @@ router.post('/signin', function(req, res, next){
 
 router.post('/signup', function(req,res,next){
   //Use bcrypt to Sign Up
+  bcrypt.hash(req.body.password, 10, function(err, hash){
 
-    db.signUp()
+    db.signUp(req.body, hash)
     .then(function(agent){
       if (agent[0].password === req.body.password) {
         res.render('index', { title: 'gClassified', message: 'Password Must Be Hashed. Government Secrets are at Stake!' })
@@ -28,6 +29,7 @@ router.post('/signup', function(req,res,next){
         res.render('index', { title: 'gClassified', message: 'Sign Up Successful' })
       }
     })
+  })
 })
 
 module.exports = router
